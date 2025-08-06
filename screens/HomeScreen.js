@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Text, TouchableOpacity, Alert } from 'react-native';
+import { Text, TouchableOpacity, Alert, Platform } from 'react-native';
 
 import {
   View,
@@ -62,30 +62,49 @@ export default function HomeScreen({ navigation }) {
   };
 
   const deleteTask = (id) => {
+    console.log('deleteTask called with id:', id);
     const taskToDelete = tasks.find(t => t.id === id);
+    console.log('taskToDelete:', taskToDelete);
     if (taskToDelete) {
-      Alert.alert(
-        'Delete Task',
-        `Are you sure you want to delete "${taskToDelete.text}"?`,
-        [
-          { text: 'Cancel', style: 'cancel' },
-          {
-            text: 'Delete',
-            style: 'destructive',
-            onPress: () => {
-              const logItem = {
-                ...taskToDelete,
-                action: 'deleted',
-                actionAt: new Date().toLocaleString()
-              };
-              setHistory(prev => [...prev, logItem]);
-              console.log(`[DELETE] "${taskToDelete.text}" at ${logItem.actionAt}`);
-              setTasks(tasks.filter(t => t.id !== id));
+      // Temporarily remove confirmation for testing
+      console.log('Proceeding with delete...');
+      performDelete(taskToDelete, id);
+      
+      // Original confirmation code (commented out for testing)
+      /*
+      if (Platform.OS === 'web') {
+        // For web, use browser confirm
+        if (window.confirm(`Are you sure you want to delete "${taskToDelete.text}"?`)) {
+          performDelete(taskToDelete, id);
+        }
+      } else {
+        // For mobile, use React Native Alert
+        Alert.alert(
+          'Delete Task',
+          `Are you sure you want to delete "${taskToDelete.text}"?`,
+          [
+            { text: 'Cancel', style: 'cancel' },
+            {
+              text: 'Delete',
+              style: 'destructive',
+              onPress: () => performDelete(taskToDelete, id)
             }
-          }
-        ]
-      );
+          ]
+        );
+      }
+      */
     }
+  };
+
+  const performDelete = (taskToDelete, id) => {
+    const logItem = {
+      ...taskToDelete,
+      action: 'deleted',
+      actionAt: new Date().toLocaleString()
+    };
+    setHistory(prev => [...prev, logItem]);
+    console.log(`[DELETE] "${taskToDelete.text}" at ${logItem.actionAt}`);
+    setTasks(tasks.filter(t => t.id !== id));
   };
 
   const completedTasks = tasks.filter(t => t.completed).length;

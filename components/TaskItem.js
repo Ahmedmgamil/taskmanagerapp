@@ -53,7 +53,15 @@ export default function TaskItem({ task, onToggleComplete, onDelete }) {
             styles.completeButton,
             task.completed && styles.undoButton
           ]}
-          onPress={onToggleComplete}
+          activeOpacity={0.7}
+          onPress={() => {
+            console.log('Complete button pressed for task:', task.id);
+            if (onToggleComplete) {
+              onToggleComplete();
+            } else {
+              console.log('onToggleComplete is undefined!');
+            }
+          }}
         >
           <Text style={[
             styles.actionButtonText,
@@ -65,7 +73,15 @@ export default function TaskItem({ task, onToggleComplete, onDelete }) {
 
         <TouchableOpacity
           style={[styles.actionButton, styles.deleteButton]}
-          onPress={onDelete}
+          activeOpacity={0.7}
+          onPress={() => {
+            console.log('Delete button pressed for task:', task.id);
+            if (onDelete) {
+              onDelete();
+            } else {
+              console.log('onDelete is undefined!');
+            }
+          }}
         >
           <Text style={styles.deleteButtonText}>🗑️ Delete</Text>
         </TouchableOpacity>
