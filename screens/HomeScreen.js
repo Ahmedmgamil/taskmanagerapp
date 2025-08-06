@@ -66,12 +66,6 @@ export default function HomeScreen({ navigation }) {
     const taskToDelete = tasks.find(t => t.id === id);
     console.log('taskToDelete:', taskToDelete);
     if (taskToDelete) {
-      // Temporarily remove confirmation for testing
-      console.log('Proceeding with delete...');
-      performDelete(taskToDelete, id);
-      
-      // Original confirmation code (commented out for testing)
-      /*
       if (Platform.OS === 'web') {
         // For web, use browser confirm
         if (window.confirm(`Are you sure you want to delete "${taskToDelete.text}"?`)) {
@@ -92,7 +86,6 @@ export default function HomeScreen({ navigation }) {
           ]
         );
       }
-      */
     }
   };
 
